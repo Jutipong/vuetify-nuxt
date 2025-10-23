@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { z } from 'zod'
+
 const state = reactive({
     title: '',
     price: 0,

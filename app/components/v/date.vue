@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import dayjs from 'dayjs'
 import buddhistEra from 'dayjs/plugin/buddhistEra'
 
 const props = defineProps<{

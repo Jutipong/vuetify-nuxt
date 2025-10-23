@@ -96,9 +96,13 @@ onMounted(() => {
             <div class="drawer-inner">
                 <v-list>
                     <v-list-item
-                        :prepend-icon="(layoutStore.state.rail && !isHovered) ? 'mdi-dog' : undefined"
-                        :prepend-avatar="(!layoutStore.state.rail || isHovered) ? 'https://randomuser.me/api/portraits/women/44.jpg' : undefined"
-                        :subtitle="(!layoutStore.state.rail || isHovered) ? 'abc@gmail.com' : undefined"
+                        v-if="layoutStore.state.rail && !isHovered"
+                        prepend-icon="mdi-dog"
+                    />
+                    <v-list-item
+                        v-else
+                        prepend-avatar="https://randomuser.me/api/portraits/women/44.jpg"
+                        subtitle="abc@gmail.com"
                     />
                 </v-list>
                 <v-divider />

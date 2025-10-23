@@ -1,4 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { lightTheme } from './app/utils/config/vuetify/theme-light'
+import { darkTheme } from './app/utils/config/vuetify/theme-dark'
+import { variables } from './app/utils/config/vuetify/variables'
+import defaultComponents from './app/utils/config/vuetify/default-components'
+
 export default defineNuxtConfig({
     devtools: { enabled: false },
     compatibilityDate: '2025-07-15',
@@ -10,10 +15,16 @@ export default defineNuxtConfig({
         '@vueuse/nuxt',
     ],
 
+    components: [
+        {
+            path: '~/components',
+            pathPrefix: true,
+        },
+    ],
+
     css: [
         '~/assets/sass/style.scss',
         '~/assets/css/main.css',
-        'vuetify/styles',
         'vue3-perfect-scrollbar/style.css',
         'vue-toastification/dist/index.css',
     ],
@@ -24,18 +35,33 @@ export default defineNuxtConfig({
                 reloadOnFirstRequest: false,
             },
         },
+        vuetifyOptions: {
+            locale: {
+                locale: 'en',
+            },
+            defaults: defaultComponents,
+            theme: {
+                defaultTheme: 'light',
+                themes: {
+                    light: {
+                        colors: lightTheme,
+                        variables,
+                    },
+                    dark: {
+                        colors: darkTheme,
+                        variables,
+                    },
+                },
+            },
+            icons: {
+                defaultSet: 'mdi',
+            },
+        },
     },
 
     imports: {
         dirs: ['stores', 'utils', 'types'],
     },
-
-    components: [
-        {
-            path: '~/components',
-            pathPrefix: false,
-        },
-    ],
 
     runtimeConfig: {
         public: {
