@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import type { PluginFunc } from 'dayjs'
 
 const BuddhistEraPlugin: PluginFunc = (option, dayjsClass) => {

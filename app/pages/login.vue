@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 const { setToken, setUser } = useAuthStore()
+const router = useRouter()
 
 const state = reactive({
     user: {
@@ -23,7 +24,7 @@ async function logIn() {
     setToken(res.accessToken)
     setUser(res)
 
-    await navigateTo('/')
+    router.push('/')
 }
 
 definePageMeta({

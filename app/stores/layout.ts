@@ -29,7 +29,7 @@ export const useLayoutStore = defineStore('layout', () => {
     }
 }, {
     persist: {
-        storage: import.meta.client ? localStorage : undefined,
+        storage: localStorage,
         pick: ['state'],
     },
 })

@@ -10,16 +10,11 @@ interface CacheOptions {
 }
 
 class CacheManager {
-    private storage: Storage | null
+    private storage: Storage
     private prefix: string
 
-    constructor(storage?: Storage, prefix: string = 'api-cache:') {
-        // Check if we're in a browser environment
-        if (typeof window !== 'undefined' && storage === undefined) {
-            this.storage = sessionStorage
-        } else {
-            this.storage = storage || null
-        }
+    constructor(storage: Storage = sessionStorage, prefix: string = 'api-cache:') {
+        this.storage = storage
         this.prefix = prefix
     }
 
@@ -32,8 +27,6 @@ class CacheManager {
     }
 
     set(key: string, data: any, options: CacheOptions = {}): void {
-        if (!this.storage) return
-
         const ttl = options.ttl ? _dateTime.TimeConfig(options.ttl) : _dateTime.TimeConfig('5min')
 
         const cacheItem: CacheItem = {
@@ -51,8 +44,6 @@ class CacheManager {
     }
 
     get(key: string): any | null {
-        if (!this.storage) return null
-
         try {
             const cached = this.storage.getItem(this.getKey(key))
 
@@ -76,8 +67,6 @@ class CacheManager {
     }
 
     delete(key: string): void {
-        if (!this.storage) return
-
         try {
             this.storage.removeItem(this.getKey(key))
         }
@@ -87,13 +76,11 @@ class CacheManager {
     }
 
     clear(): void {
-        if (!this.storage) return
-
         try {
             const keys = Object.keys(this.storage)
             keys.forEach((key) => {
                 if (key.startsWith(this.prefix)) {
-                    this.storage!.removeItem(key)
+                    this.storage.removeItem(key)
                 }
             })
         }
@@ -108,8 +95,6 @@ class CacheManager {
     }
 
     size(): number {
-        if (!this.storage) return 0
-
         try {
             const keys = Object.keys(this.storage)
             return keys.filter(key => key.startsWith(this.prefix)).length

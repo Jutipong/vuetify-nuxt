@@ -90,6 +90,8 @@ async function fetchWithCache<T>(url: string, method: string, requestFn: () => P
 }
 
 function handleApiError(err: any) {
+    const { resetLoading } = useAppStore()
+
     let errorCode: any = ''
     let errorMessage: string = ''
 
@@ -104,13 +106,7 @@ function handleApiError(err: any) {
     }
 
     _alert.Err(`status code: ${errorCode}`, errorMessage)
-    
-    try {
-        const { resetLoading } = useAppStore()
-        resetLoading()
-    } catch (error) {
-        // Pinia store not available (SSR)
-    }
+    resetLoading()
 
     if (errorCode === 401) {
         const router = useRouter()
@@ -124,22 +120,14 @@ axiosInstance.interceptors.request.use((config: any) => {
     const shouldShowLoading = config?.isLoading ?? true
 
     if (shouldShowLoading) {
-        try {
-            const { setLoading } = useAppStore()
-            setLoading()
-        } catch (error) {
-            // Pinia store not available (SSR)
-        }
+        const { setLoading } = useAppStore()
+        setLoading()
     }
 
     // Add authorization token dynamically
-    try {
-        const { token } = useAuthStore()
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`
-        }
-    } catch (error) {
-        // Pinia store not available (SSR), skip token
+    const { token } = useAuthStore()
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`
     }
 
     return config
@@ -149,12 +137,8 @@ axiosInstance.interceptors.response.use(({ config, data }: any): AxiosResponse<a
     const shouldHideLoading = config?.isLoading ?? true
 
     if (shouldHideLoading) {
-        try {
-            const { unLoading } = useAppStore()
-            unLoading()
-        } catch (error) {
-            // Pinia store not available (SSR)
-        }
+        const { unLoading } = useAppStore()
+        unLoading()
     }
 
     return data

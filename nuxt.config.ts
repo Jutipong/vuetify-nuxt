@@ -8,6 +8,9 @@ export default defineNuxtConfig({
     devtools: { enabled: false },
     compatibilityDate: '2025-07-15',
     
+    // เปิดใช้งาน CSR ทั้งหมด
+    ssr: false,
+    
     modules: [
         'vuetify-nuxt-module',
         '@pinia/nuxt',
@@ -15,12 +18,18 @@ export default defineNuxtConfig({
         '@vueuse/nuxt',
     ],
 
+    imports: {
+        dirs: ['stores', 'utils', 'types'],
+    },
+
     components: [
         {
             path: '~/components',
             pathPrefix: true,
         },
     ],
+
+    
 
     css: [
         '~/assets/sass/style.scss',
@@ -57,10 +66,6 @@ export default defineNuxtConfig({
                 defaultSet: 'mdi',
             },
         },
-    },
-
-    imports: {
-        dirs: ['stores', 'utils', 'types'],
     },
 
     runtimeConfig: {
