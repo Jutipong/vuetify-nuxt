@@ -14,17 +14,29 @@ const state = reactive({
 async function logIn() {
     state.isLoading = true
 
-    const res = await api.Post<UserLogin>('/auth/login', {
-        username: state.user.username,
-        password: state.user.password,
-    }, { isLoading: false })
+    try {
+        const res = await api.Post<UserLogin>('/auth/login', {
+            username: state.user.username,
+            password: state.user.password,
+        }, { isLoading: false })
 
-    state.isLoading = false
+        debugger;
 
-    setToken(res.accessToken)
-    setUser(res)
+        setToken(res.accessToken)
+        setUser(res)
 
-    router.push('/')
+        // รอให้ persist state เสร็จก่อน
+        await nextTick()
+
+        // ใช้ navigateTo แทน router.push
+        await navigateTo('/', { replace: true })
+    }
+    catch (error) {
+        console.error('Login failed:', error)
+    }
+    finally {
+        state.isLoading = false
+    }
 }
 
 definePageMeta({

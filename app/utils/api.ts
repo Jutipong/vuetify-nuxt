@@ -50,14 +50,54 @@ function transformDateToISO(data: any): any {
     return data
 }
 
-const axiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL,
-    headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-    },
-    transformRequest: [transformDateToISO, ...(axios.defaults.transformRequest as AxiosRequestTransformer[])],
-})
+import type { AxiosInstance } from 'axios'
+
+let axiosInstance: AxiosInstance | null = null
+
+function getAxiosInstance(): AxiosInstance {
+    if (!axiosInstance) {
+        const config = useRuntimeConfig()
+        axiosInstance = axios.create({
+            baseURL: config.public.apiBaseUrl,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+            },
+            transformRequest: [transformDateToISO, ...(axios.defaults.transformRequest as AxiosRequestTransformer[])],
+        })
+
+        // Setup interceptors
+        axiosInstance.interceptors.request.use((config: any) => {
+            const shouldShowLoading = config?.isLoading ?? true
+
+            if (shouldShowLoading) {
+                const { setLoading } = useAppStore()
+                setLoading()
+            }
+
+            // Add authorization token dynamically
+            const { token } = useAuthStore()
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`
+            }
+
+            return config
+        }, handleApiError)
+
+        axiosInstance.interceptors.response.use(({ config, data }: any): AxiosResponse<any, any> => {
+            const shouldHideLoading = config?.isLoading ?? true
+
+            if (shouldHideLoading) {
+                const { unLoading } = useAppStore()
+                unLoading()
+            }
+
+            return data
+        }, handleApiError)
+    }
+
+    return axiosInstance
+}
 
 function isCacheableRequest(method: string, status?: number): boolean {
     const isMethodCacheable = CACHEABLE_METHODS.includes(method.toLowerCase())
@@ -116,34 +156,6 @@ function handleApiError(err: any) {
     return Promise.reject(err)
 }
 
-axiosInstance.interceptors.request.use((config: any) => {
-    const shouldShowLoading = config?.isLoading ?? true
-
-    if (shouldShowLoading) {
-        const { setLoading } = useAppStore()
-        setLoading()
-    }
-
-    // Add authorization token dynamically
-    const { token } = useAuthStore()
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`
-    }
-
-    return config
-}, handleApiError)
-
-axiosInstance.interceptors.response.use(({ config, data }: any): AxiosResponse<any, any> => {
-    const shouldHideLoading = config?.isLoading ?? true
-
-    if (shouldHideLoading) {
-        const { unLoading } = useAppStore()
-        unLoading()
-    }
-
-    return data
-}, handleApiError)
-
 function createApiConfig(options?: ApiOptions): AxiosRequestConfig {
     const defaultConfig = {
         timeout: _dateTime.TimeConfig(DEFAULT_TIMEOUT),
@@ -165,29 +177,33 @@ function createApiConfig(options?: ApiOptions): AxiosRequestConfig {
 
 const api = {
     Get: async <TResponse>(url: string, config?: ApiOptions) => {
+        const instance = getAxiosInstance()
         return await fetchWithCache<TResponse>(
             url,
             'GET',
-            () => axiosInstance.get<any, TResponse>(url, createApiConfig(config)),
+            () => instance.get<any, TResponse>(url, createApiConfig(config)),
             { ...config, params: config?.params },
         )
     },
 
     Post: async <TResponse>(url: string, data?: any, config?: ApiOptions) => {
+        const instance = getAxiosInstance()
         return await fetchWithCache<TResponse>(
             url,
             'POST',
-            () => axiosInstance.post<any, TResponse>(url, data, createApiConfig(config)),
+            () => instance.post<any, TResponse>(url, data, createApiConfig(config)),
             { ...config, data },
         )
     },
 
     Put: async <TResponse>(url: string, data?: any, config?: ApiOptions) => {
-        return await axiosInstance.put<any, TResponse>(url, data, createApiConfig(config))
+        const instance = getAxiosInstance()
+        return await instance.put<any, TResponse>(url, data, createApiConfig(config))
     },
 
     Delete: async <TResponse>(url: string, config?: ApiOptions) => {
-        return await axiosInstance.delete<any, TResponse>(url, createApiConfig(config))
+        const instance = getAxiosInstance()
+        return await instance.delete<any, TResponse>(url, createApiConfig(config))
     },
 }
 
