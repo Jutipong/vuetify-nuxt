@@ -19,10 +19,6 @@ export default defineNuxtConfig({
         '@vueuse/nuxt',
     ],
 
-    // pinia: {
-    //     storesDirs: ['./stores/**'],
-    // },
-
     imports: {
         dirs: ['stores', 'utils', 'types'],
     },
