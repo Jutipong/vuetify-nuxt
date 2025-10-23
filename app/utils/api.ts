@@ -2,8 +2,6 @@ import type { AxiosRequestConfig, AxiosRequestTransformer, AxiosResponse } from 
 import axios from 'axios'
 import { cache, createCacheKey } from './cache'
 
-const { token } = useAuthStore()
-
 interface ApiOptions {
     timeout?: TimeConfig
     baseURL?: string
@@ -57,7 +55,6 @@ const axiosInstance = axios.create({
     headers: {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
     },
     transformRequest: [transformDateToISO, ...(axios.defaults.transformRequest as AxiosRequestTransformer[])],
 })
@@ -93,8 +90,6 @@ async function fetchWithCache<T>(url: string, method: string, requestFn: () => P
 }
 
 function handleApiError(err: any) {
-    const { resetLoading } = useAppStore()
-
     let errorCode: any = ''
     let errorMessage: string = ''
 
@@ -109,7 +104,13 @@ function handleApiError(err: any) {
     }
 
     _alert.Err(`status code: ${errorCode}`, errorMessage)
-    resetLoading()
+    
+    try {
+        const { resetLoading } = useAppStore()
+        resetLoading()
+    } catch (error) {
+        // Pinia store not available (SSR)
+    }
 
     if (errorCode === 401) {
         const router = useRouter()
@@ -123,8 +124,22 @@ axiosInstance.interceptors.request.use((config: any) => {
     const shouldShowLoading = config?.isLoading ?? true
 
     if (shouldShowLoading) {
-        const { setLoading } = useAppStore()
-        setLoading()
+        try {
+            const { setLoading } = useAppStore()
+            setLoading()
+        } catch (error) {
+            // Pinia store not available (SSR)
+        }
+    }
+
+    // Add authorization token dynamically
+    try {
+        const { token } = useAuthStore()
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`
+        }
+    } catch (error) {
+        // Pinia store not available (SSR), skip token
     }
 
     return config
@@ -134,8 +149,12 @@ axiosInstance.interceptors.response.use(({ config, data }: any): AxiosResponse<a
     const shouldHideLoading = config?.isLoading ?? true
 
     if (shouldHideLoading) {
-        const { unLoading } = useAppStore()
-        unLoading()
+        try {
+            const { unLoading } = useAppStore()
+            unLoading()
+        } catch (error) {
+            // Pinia store not available (SSR)
+        }
     }
 
     return data
