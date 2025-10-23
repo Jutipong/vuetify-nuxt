@@ -15,6 +15,7 @@ function toggleTheme() {
 }
 
 async function logOut() {
+    debugger
     if (!await _confirm.Info('Logout!', '<div style="font-size: 60px; display: flex; justify-content: space-around; color:#FF4C51" '
         + `class="animate-tada animate-count-infinite animate-duration-3s">`
         + `<span class="i-mdi:logout"></span>`
@@ -34,7 +35,12 @@ async function logOut() {
         return
     }
 
-    await navigateTo('/login')
+    // Clear auth state
+    const { clearAuth } = useAuthStore()
+    clearAuth()
+
+    // Navigate to login
+    await navigateTo('/login', { replace: true })
 }
 
 const iconTheme = computed(() => theme.global.name.value === 'light' ? 'mdi-white-balance-sunny' : 'mdi-weather-night')

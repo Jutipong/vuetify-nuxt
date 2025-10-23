@@ -13,10 +13,15 @@ export default defineNuxtConfig({
     
     modules: [
         'vuetify-nuxt-module',
-        '@pinia/nuxt',
+        '@pinia/nuxt', // required
+    'pinia-plugin-persistedstate/nuxt',
         '@unocss/nuxt',
         '@vueuse/nuxt',
     ],
+
+    // pinia: {
+    //     storesDirs: ['./stores/**'],
+    // },
 
     imports: {
         dirs: ['stores', 'utils', 'types'],
