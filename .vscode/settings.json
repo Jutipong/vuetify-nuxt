@@ -1,35 +1,25 @@
 {
-    "cSpell.words": [
-        "antfu",
-        "Attributify",
-        "Combobox",
-        "Customizer",
-        "datas",
-        "demi",
-        "iconify",
-        "intlify",
-        "pinia",
-        "pnpm",
-        "Roboto",
-        "tada",
-        "TCRB",
-        "Toastification",
-        "Uncapitalize",
-        "unocss",
-        "unplugin",
-        "Vite",
-        "vitejs",
-        "Vitesse",
-        "vitest",
-        "vuetify",
-        "vueuse",
-    ],
     "editor.fontLigatures": true,
     "editor.smoothScrolling": true,
     "editor.inlineSuggest.enabled": true,
     "editor.cursorBlinking": "expand",
     "editor.semanticHighlighting.enabled": true,
     "editor.cursorSmoothCaretAnimation": "on",
+    // "vue.inlayHints.missingProps": true,
+    // "vue.inlayHints.optionsWrapper": true,
+    // "vue.inlayHints.vBindShorthand": true,
+    // "vue.inlayHints.destructuredProps": true,
+    // "editor.minimap.enabled": false,
+    // "typescript.preferences.autoImportFileExcludePatterns": [
+    //     "vue-router"
+    // ],
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.colorTheme": "Dracula Theme",
+    "editor.fontSize": 15,
+    "editor.lineHeight": 25,
+    "editor.fontFamily": "'Jetbrains Mono Light', 'Jetbrains Mono', 'Cascadia Code', Consolas, 'Courier New', monospace",
+    "workbench.tree.indent": 12,
+    "debug.toolBarLocation": "commandCenter",
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
@@ -45,14 +35,6 @@
     "[javascript]": {
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
-    "vue.inlayHints.missingProps": true,
-    "vue.inlayHints.optionsWrapper": true,
-    "vue.inlayHints.vBindShorthand": true,
-    "vue.inlayHints.destructuredProps": true,
-    "editor.minimap.enabled": false,
-    "typescript.preferences.autoImportFileExcludePatterns": [
-        "vue-router"
-    ],
     "files.exclude": {
         "**/.git": true,
         "**/.svn": false,
@@ -60,22 +42,13 @@
         "**/.DS_Store": false,
         "**/Thumbs.db": false,
         "**/CVS": false,
-        "**/node_modules": false,
+        "**/node_modules": true,
         ".browserslistrc": false,
         ".gitignore": false,
         "tsconfig.node.json": false,
         "src/vite-env.d.ts": false,
         "yarn.lock": false
     },
-    "workbench.iconTheme": "vscode-icons",
-    "workbench.colorTheme": "Simple Dark",
-    "editor.fontSize": 15,
-    "editor.lineHeight": 25,
-    "editor.fontFamily": "'Jetbrains Mono Light', 'Jetbrains Mono', 'Cascadia Code', Consolas, 'Courier New', monospace",
-    "workbench.tree.indent": 12,
-    "debug.toolBarLocation": "commandCenter",
-    "editor.gotoLocation.multipleDefinitions": "goto",
-    "gotoAlias.closeDts": true,
     // -----------------------------------
     // ---------- File Nesting -----------
     // -----------------------------------
@@ -178,96 +151,5 @@
     },
     // -----------------------------------
     // ---------End File Nesting ---------
-    // -----------------------------------
-    // -----------------------------------
-    // ---------- ESlint Config ----------
-    // -----------------------------------
-    // Disable the default formatter, use eslint instead
-    "prettier.enable": false,
-    "editor.formatOnSave": false,
-    // Auto fix
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit",
-        "source.organizeImports": "never"
-    },
-    // Silent the stylistic rules in you IDE, but still auto fix them
-    "eslint.rules.customizations": [
-        {
-            "rule": "style/*",
-            "severity": "off",
-            "fixable": true
-        },
-        {
-            "rule": "format/*",
-            "severity": "off",
-            "fixable": true
-        },
-        {
-            "rule": "*-indent",
-            "severity": "off",
-            "fixable": true
-        },
-        {
-            "rule": "*-spacing",
-            "severity": "off",
-            "fixable": true
-        },
-        {
-            "rule": "*-spaces",
-            "severity": "off",
-            "fixable": true
-        },
-        {
-            "rule": "*-order",
-            "severity": "off",
-            "fixable": true
-        },
-        {
-            "rule": "*-dangle",
-            "severity": "off",
-            "fixable": true
-        },
-        {
-            "rule": "*-newline",
-            "severity": "off",
-            "fixable": true
-        },
-        {
-            "rule": "*quotes",
-            "severity": "off",
-            "fixable": true
-        },
-        {
-            "rule": "*semi",
-            "severity": "off",
-            "fixable": true
-        }
-    ],
-    // Enable eslint for all supported languages
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact",
-        "vue",
-        "html",
-        "markdown",
-        "json",
-        "jsonc",
-        "yaml",
-        "toml",
-        "xml",
-        "gql",
-        "graphql",
-        "astro",
-        "svelte",
-        "css",
-        "less",
-        "scss",
-        "pcss",
-        "postcss"
-    ]
-    // -----------------------------------
-    // -------- End ESlint Config --------
     // -----------------------------------
 }
