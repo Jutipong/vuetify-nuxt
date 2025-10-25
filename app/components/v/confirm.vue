@@ -1,8 +1,5 @@
 <script setup lang="ts">
-// import store from '../../utils/confirm'
 const store = useConfirm()
-
-console.log('VConfirm component mounted', store)
 
 const display = useDisplay()
 const colorIconTitle = computed(() => {
