@@ -1,15 +1,25 @@
 <script setup lang="ts">
 import type { ProductServer, ProductProductServerRequest, ProductProductServerSearchResponse } from '../../shared/types/ProductServer'
 
-const message = ref('')
-const products = ref<ProductServer[]>([])
-const total = ref(0)
+const state = reactive<ProductProductServerSearchResponse>({
+products: [] as ProductServer[],
+total: 0,
+message: '',
+limit: 0,
+skip: 0,
+})
+// const products = ref<ProductServer[]>([])
+// const total = ref(0)
 const authStore = useAuthStore()
 
 async function getMessage() {
-    const req : ProductProductServerRequest = { q: 'phone', limit: 5, skip: 0 }
 
-  const { data } = await useFetch<ProductProductServerSearchResponse>('/api/product/getProduct', {
+// mod to 1 or 2
+// const searchRandom = Math.random() < 0.5 ? 'iphone' : 'android';
+
+    const req : ProductProductServerRequest = { q: "android", limit: 5, skip: 0 }
+
+  const data = await $fetch<ProductProductServerSearchResponse>('/api/product/getProduct', {
     headers: {
       'Authorization': `Bearer ${authStore.token}`
     },
@@ -17,14 +27,14 @@ async function getMessage() {
     body: req
   })
 
+  state = data
   
-  console.log(data.value);
-  
-  if (data.value) {
-    products.value = data.value.products
-    total.value = data.value.total
-    message.value = `Found ${data.value.total} products`
-  }
+  // console.log(data);
+  // if (data) {
+  //   products.value = data.products
+  //   total.value = data.total
+  //   message.value = `Found ${data.total} products`
+  // }
 }
 
 </script>

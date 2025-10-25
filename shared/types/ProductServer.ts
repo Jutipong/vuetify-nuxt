@@ -17,6 +17,7 @@ export interface ProductProductServerSearchResponse {
   total: number
   skip: number
   limit: number
+  message?: string
 }
 
 export interface ProductProductServerRequest {
