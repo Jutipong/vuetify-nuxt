@@ -1,23 +1,21 @@
 <script setup lang="ts">
-import type { Product } from '../../types/Product'
+import type { ProductServer, ProductProductServerRequest, ProductProductServerSearchResponse } from '../../types/ProductServer'
 
 const message = ref('')
-const products = ref<Product[]>([])
+const products = ref<ProductServer[]>([])
 const total = ref(0)
 const authStore = useAuthStore()
 
 async function getMessage() {
-  debugger;
+    const req : ProductProductServerRequest = { q: 'phone', limit: 5, skip: 0 }
+
   const { data } = await useFetch('/api/hello', {
     headers: {
       'Authorization': `Bearer ${authStore.token}`
     },
-    params: {
-      q: '',
-      limit: 10,
-      skip: 0
-    }
+    method: 'GET',
   })
+
   
   console.log(data.value);
   

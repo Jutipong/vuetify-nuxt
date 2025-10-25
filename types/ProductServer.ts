@@ -1,4 +1,4 @@
-export interface Product {
+export interface ProductServer {
   id: number
   title: string
   description: string
@@ -12,9 +12,15 @@ export interface Product {
   images: string[]
 }
 
-export interface ProductSearchResponse {
-  products: Product[]
+export interface ProductProductServerSearchResponse {
+  products: ProductServer[]
   total: number
   skip: number
   limit: number
+}
+
+export interface ProductProductServerRequest {
+  q: string
+  limit?: number
+  skip?: number
 }
