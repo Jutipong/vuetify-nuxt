@@ -27,14 +27,9 @@ async function getMessage() {
     body: req
   })
 
-  state = data
+  Object.assign(state, data)
   
-  // console.log(data);
-  // if (data) {
-  //   products.value = data.products
-  //   total.value = data.total
-  //   message.value = `Found ${data.total} products`
-  // }
+  state.message = `Found ${data.total} products`
 }
 
 </script>
@@ -43,11 +38,11 @@ async function getMessage() {
   <v-container>
     <VBtn color="warning" prepend-icon="mdi-refresh" text="Load Products"  @click="getMessage()"/>
     <br>
-    <div>{{ message }}</div>
+    <div>{{ state.message }}</div>
     <br>
     
-    <v-row v-if="products && products.length > 0">
-      <v-col v-for="product in products" :key="product.id" cols="12" md="4">
+    <v-row v-if="state.products && state.products.length > 0">
+      <v-col v-for="product in state.products" :key="product.id" cols="12" md="4">
         <v-card>
           <v-img :src="product.thumbnail" height="200" cover></v-img>
           <v-card-title>{{ product.title }}</v-card-title>
