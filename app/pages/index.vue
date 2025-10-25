@@ -9,11 +9,12 @@ const authStore = useAuthStore()
 async function getMessage() {
     const req : ProductProductServerRequest = { q: 'phone', limit: 5, skip: 0 }
 
-  const { data } = await useFetch<ProductProductServerSearchResponse>('/api/product/get', {
+  const { data } = await useFetch<ProductProductServerSearchResponse>('/api/product/getProduct', {
     headers: {
       'Authorization': `Bearer ${authStore.token}`
     },
-    method: 'GET',
+    method: 'POST',
+    body: req
   })
 
   
