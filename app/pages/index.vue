@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ProductServer, ProductProductServerRequest, ProductProductServerSearchResponse } from '../../types/ProductServer'
+import type { ProductServer, ProductProductServerRequest, ProductProductServerSearchResponse } from '../../shared/types/ProductServer'
 
 const message = ref('')
 const products = ref<ProductServer[]>([])
@@ -9,7 +9,7 @@ const authStore = useAuthStore()
 async function getMessage() {
     const req : ProductProductServerRequest = { q: 'phone', limit: 5, skip: 0 }
 
-  const { data } = await useFetch('/api/hello', {
+  const { data } = await useFetch<ProductProductServerSearchResponse>('/api/hello', {
     headers: {
       'Authorization': `Bearer ${authStore.token}`
     },
@@ -35,7 +35,7 @@ async function getMessage() {
     <div>{{ message }}</div>
     <br>
     
-    <v-row v-if="products.length > 0">
+    <v-row v-if="products && products.length > 0">
       <v-col v-for="product in products" :key="product.id" cols="12" md="4">
         <v-card>
           <v-img :src="product.thumbnail" height="200" cover></v-img>
