@@ -18,12 +18,12 @@ async function getMessage() {
 // const searchRandom = Math.random() < 0.5 ? 'iphone' : 'android';
 
     const req : ProductProductServerRequest = { q: "android", limit: 5, skip: 0 }
-
-  const data = await $fetch<ProductProductServerSearchResponse>('/api/product/getProduct', {
+/*products/search?q=${state.search.brand ?? ''}
+    &limit=${table.options.itemsPerPage}&skip=${table.options.itemsPerPage * (table.options.page - 1)}`*/
+  const data = await $fetch<ProductProductServerSearchResponse>('/api/post',{ 
     headers: {
       'Authorization': `Bearer ${authStore.token}`
     },
-    method: 'POST',
     body: req
   })
 
